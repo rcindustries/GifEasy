@@ -1,0 +1,9 @@
+pyproject.toml
+setup.py
+GifEasy/GifEasy.py
+GifEasy/__init__.py
+GifEasy.egg-info/PKG-INFO
+GifEasy.egg-info/SOURCES.txt
+GifEasy.egg-info/dependency_links.txt
+GifEasy.egg-info/requires.txt
+GifEasy.egg-info/top_level.txt
