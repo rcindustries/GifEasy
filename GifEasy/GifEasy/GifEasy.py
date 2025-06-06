@@ -4,9 +4,10 @@ from PIL import Image, ImageTk, ImageSequence
 class gif_easy(tk.Label):
     def __init__(self, parent, gif, delay=20):
         super().__init__(parent)
+        self.parent = parent
+        self.gif_path = gif
         self.gif = Image.open(gif)
-        self.original_frames = [frame.copy() for frame in ImageSequence.Iterator(self.gif)]
-        self.frames = [ImageTk.PhotoImage(frame) for frame in self.original_frames]  # Garde les frames originales
+        self.frames = [ImageTk.PhotoImage(frame) for frame in ImageSequence.Iterator(self.gif)]
         self.delay = int(delay * 1000)
         self.frame_index = 0
         self.running = False
@@ -27,12 +28,31 @@ class gif_easy(tk.Label):
         self.running = False
 
     def style(self, bg=None, size=None):
-        """Modifie l'apparence du GIF : arrière-plan et taille (sans casser l'animation)."""
+        """Modifie l'apparence du GIF : arrière-plan et taille."""
         if bg:
             self.config(bg=bg)
             self.master.config(bg=bg)
-
         if size:
             x, y = size
-            self.frames = [ImageTk.PhotoImage(frame.resize((x, y))) for frame in self.original_frames]  # Redimensionne chaque frame
-            self.config(image=self.frames[0])  # Affiche la première frame redimensionnée
+            self.frames = [ImageTk.PhotoImage(frame.resize((x, y))) for frame in ImageSequence.Iterator(self.gif)]
+            self.config(image=self.frames[0])
+
+    def visible(self, state):
+        """Affiche ou masque le GIF."""
+        if state:
+            self.pack()
+        else:
+            self.pack_forget()
+
+    def change(self, gif):
+        """Change le GIF affiché."""
+        self.gif_path = gif
+        self.gif = Image.open(gif)
+        self.frames = [ImageTk.PhotoImage(frame) for frame in ImageSequence.Iterator(self.gif)]
+        self.config(image=self.frames[0])
+
+    def destroy(self):
+        """Supprime le GIF de l'affichage."""
+        self.pack_forget()
+        self.running = False
+        self.destroy()
