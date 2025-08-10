@@ -11,3 +11,4 @@ gif.pack(padx=10, pady=20)
 gif.start()
 
 root.mainloop()
+
